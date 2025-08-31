@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { BusinessProfileForm } from '@/components/forms/BusinessProfileForm'
+import { ServiceList } from '@/components/forms/ServiceList'
 import type { User } from '@supabase/supabase-js'
 
 export default function DashboardPage() {
@@ -55,70 +58,91 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Perfil</CardTitle>
-              <CardDescription>
-                Informações da sua conta
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <p><strong>Email:</strong> {user?.email}</p>
-                <p><strong>Nome:</strong> {user?.user_metadata?.full_name || 'Não informado'}</p>
-                <p><strong>Conta criada:</strong> {new Date(user?.created_at || '').toLocaleDateString('pt-BR')}</p>
-              </div>
-            </CardContent>
-          </Card>
+        <Tabs defaultValue="profile" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="profile">Perfil do Negócio</TabsTrigger>
+            <TabsTrigger value="services">Serviços</TabsTrigger>
+            <TabsTrigger value="account">Conta</TabsTrigger>
+          </TabsList>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Ações</CardTitle>
-              <CardDescription>
-                Gerenciar sua conta
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <Button variant="outline" className="w-full">
-                  Editar Perfil
-                </Button>
-                <Button variant="outline" className="w-full">
-                  Configurações
-                </Button>
-                <Button 
-                  variant="destructive" 
-                  className="w-full"
-                  onClick={handleLogout}
-                >
-                  Sair
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <TabsContent value="profile" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Configuração do Negócio</CardTitle>
+                <CardDescription>
+                  Configure as informações básicas do seu negócio
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <BusinessProfileForm />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Status</CardTitle>
-              <CardDescription>
-                Estado da sua conta
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="text-sm">Conta ativa</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="text-sm">Email verificado</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+          <TabsContent value="services" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Gerenciar Serviços</CardTitle>
+                <CardDescription>
+                  Adicione e gerencie os serviços que você oferece
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ServiceList />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="account" className="space-y-6">
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Informações da Conta</CardTitle>
+                  <CardDescription>
+                    Dados da sua conta no sistema
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <p><strong>Email:</strong> {user?.email}</p>
+                    <p><strong>Nome:</strong> {user?.user_metadata?.full_name || 'Não informado'}</p>
+                    <p><strong>Conta criada:</strong> {new Date(user?.created_at || '').toLocaleDateString('pt-BR')}</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Ações da Conta</CardTitle>
+                  <CardDescription>
+                    Gerenciar configurações e sair
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span className="text-sm">Conta ativa</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span className="text-sm">Email verificado</span>
+                      </div>
+                    </div>
+                    <Button 
+                      variant="destructive" 
+                      className="w-full"
+                      onClick={handleLogout}
+                    >
+                      Sair da Conta
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   )
