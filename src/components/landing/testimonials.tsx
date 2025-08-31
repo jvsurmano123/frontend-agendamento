@@ -9,7 +9,6 @@ import {
   DollarSign,
   CheckCircle
 } from "lucide-react";
-import Image from "next/image";
 
 const testimonials = [
   {
@@ -189,7 +188,7 @@ export function Testimonials() {
               
               <CardContent className="space-y-4">
                 <CardDescription className="text-gray-700 dark:text-gray-300 leading-relaxed italic">
-                  "{testimonial.content}"
+                  &ldquo;{testimonial.content}&rdquo;
                 </CardDescription>
                 
                 <Badge 

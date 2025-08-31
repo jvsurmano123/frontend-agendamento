@@ -26,7 +26,7 @@ const mockSupabase: MockSupabaseClient = {
 }
 
 const mockCreateClient = createClient as jest.MockedFunction<typeof createClient>
-mockCreateClient.mockReturnValue(mockSupabase as any)
+mockCreateClient.mockReturnValue(mockSupabase as unknown as SupabaseClient<Database>)
 
 describe('Supabase Integration Tests', () => {
   let supabase: SupabaseClient<Database>

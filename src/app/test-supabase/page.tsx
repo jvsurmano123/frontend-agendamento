@@ -1,11 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
 export default function TestSupabasePage() {
   const [connectionStatus, setConnectionStatus] = useState<string>('Testando...')
-  const [projectInfo, setProjectInfo] = useState<any>(null)
+  const [projectInfo, setProjectInfo] = useState<{
+    url?: string;
+    hasSession?: boolean;
+    realtimeSchema?: unknown;
+  } | null>(null)
 
   useEffect(() => {
     async function testConnection() {
@@ -60,7 +65,7 @@ export default function TestSupabasePage() {
             {projectInfo.hasSession !== undefined && (
               <p><strong>Sessão Ativa:</strong> {projectInfo.hasSession ? 'Sim' : 'Não'}</p>
             )}
-            {projectInfo.realtimeSchema && (
+            {projectInfo.realtimeSchema !== undefined && (
               <p><strong>Schema Realtime:</strong> Acessível</p>
             )}
           </div>
@@ -68,12 +73,12 @@ export default function TestSupabasePage() {
       )}
 
       <div className="mt-6">
-        <a 
+        <Link 
           href="/" 
           className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           ← Voltar para Home
-        </a>
+        </Link>
       </div>
     </div>
   )
