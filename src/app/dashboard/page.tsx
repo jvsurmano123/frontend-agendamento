@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { BusinessProfileForm } from '@/components/forms/BusinessProfileForm'
 import { ServiceList } from '@/components/forms/ServiceList'
+import { AvailabilityForm } from '@/components/forms/AvailabilityForm'
 import type { User } from '@supabase/supabase-js'
 
 export default function DashboardPage() {
@@ -59,9 +60,10 @@ export default function DashboardPage() {
         </div>
 
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="profile">Perfil do Negócio</TabsTrigger>
             <TabsTrigger value="services">Serviços</TabsTrigger>
+            <TabsTrigger value="availability">Disponibilidade</TabsTrigger>
             <TabsTrigger value="account">Conta</TabsTrigger>
           </TabsList>
 
@@ -91,6 +93,10 @@ export default function DashboardPage() {
                 <ServiceList />
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="availability" className="space-y-6">
+            <AvailabilityForm />
           </TabsContent>
 
           <TabsContent value="account" className="space-y-6">

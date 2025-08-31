@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -28,7 +28,7 @@ export function ServiceList({ onServiceChange }: ServiceListProps) {
   const router = useRouter()
   const supabase = createClient()
 
-  const loadServices = async () => {
+  const loadServices = useCallback(async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       
@@ -52,11 +52,11 @@ export function ServiceList({ onServiceChange }: ServiceListProps) {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [supabase, router])
 
   useEffect(() => {
     loadServices()
-  }, [])
+  }, [loadServices])
 
   const handleDeleteService = async (serviceId: string) => {
     if (!confirm('Tem certeza que deseja excluir este serviço?')) {

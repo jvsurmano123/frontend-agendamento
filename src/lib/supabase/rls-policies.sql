@@ -57,12 +57,39 @@ CREATE POLICY "Users can delete own services" ON services
 -- WHERE tablename IN ('profiles', 'services');
 
 -- =============================================
+-- TABELA AVAILABILITIES
+-- =============================================
+
+-- Habilitar RLS na tabela availabilities
+ALTER TABLE availabilities ENABLE ROW LEVEL SECURITY;
+
+-- Política para SELECT: usuários podem ver suas próprias disponibilidades + disponibilidades públicas
+CREATE POLICY "Users can view availabilities" ON availabilities
+  FOR SELECT USING (
+    auth.uid() = profile_id OR 
+    EXISTS (SELECT 1 FROM profiles WHERE id = profile_id)
+  );
+
+-- Política para INSERT: usuários podem criar disponibilidades apenas para seu próprio perfil
+CREATE POLICY "Users can insert own availabilities" ON availabilities
+  FOR INSERT WITH CHECK (auth.uid() = profile_id);
+
+-- Política para UPDATE: usuários podem atualizar apenas suas próprias disponibilidades
+CREATE POLICY "Users can update own availabilities" ON availabilities
+  FOR UPDATE USING (auth.uid() = profile_id);
+
+-- Política para DELETE: usuários podem deletar apenas suas próprias disponibilidades
+CREATE POLICY "Users can delete own availabilities" ON availabilities
+  FOR DELETE USING (auth.uid() = profile_id);
+
+-- =============================================
 -- GRANTS PARA USUÁRIOS AUTENTICADOS
 -- =============================================
 
 -- Garantir que usuários autenticados tenham as permissões necessárias
 GRANT SELECT, INSERT, UPDATE, DELETE ON profiles TO authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON services TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON availabilities TO authenticated;
 
 -- Garantir que usuários autenticados possam usar as sequences
 GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO authenticated;
